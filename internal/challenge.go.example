@@ -1,0 +1,17 @@
+package dayxx_partx
+
+import (
+	"fmt"
+
+	"github.com/Baipyrus/AoC-25/internal/registry"
+)
+
+var name = "Day XX - Part X"
+
+func init() {
+	registry.Register(name, Main)
+}
+
+func Main(input string) {
+	fmt.Printf("Executing: %s\n", name)
+}
