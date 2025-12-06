@@ -12,11 +12,11 @@ func init() {
 	registry.Register(name, Main)
 }
 
-var (
-	dial   uint
-	zeroes uint
-)
-
 func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
+
+	var (
+		dial   uint
+		zeroes uint
+	)
 }
