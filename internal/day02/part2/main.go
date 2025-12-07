@@ -36,17 +36,34 @@ func Main(input string) {
 			// A left/right symmetrical ID should
 			// always be of even length
 			currentId := strconv.FormatUint(i, 10)
-			if len(currentId)%2 != 0 {
-				continue
+			idLength := len(currentId)
+
+			selfSimilar := false
+		patternSize:
+			for j := idLength / 2; j >= 1; j-- {
+				// If idLength is not divisible into chunks of
+				// length j, then length j cannot form a pattern.
+				if j*(idLength/j) != idLength {
+					continue
+				}
+
+				// First substring of ID to recognize pattern with
+				pattern := currentId[:j]
+
+				for k := 1; k < idLength/j; k++ {
+					// Get next substring in ID
+					nextSubstr := currentId[j*k : j*(k+1)]
+
+					if nextSubstr != pattern {
+						continue patternSize
+					}
+				}
+
+				selfSimilar = true
+				break
 			}
 
-			// Split the ID into two
-			midway := len(currentId) / 2
-			left := currentId[:midway]
-			right := currentId[midway:]
-
-			// The halves are equal looking
-			if left == right {
+			if selfSimilar {
 				invalidIdSum += i
 			}
 		}
