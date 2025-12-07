@@ -20,6 +20,27 @@ func Main(input string) {
 	instructions, dial := day01.ParseInput(input)
 
 	for _, inst := range instructions {
+		// Calculate least required steps to reach 0:
+		// If already on 0, another 100 steps to either
+		// side are required to reach another 0 again.
+		var required uint = 100
+
+		// If the dial is moving up ("positive steps"),
+		// then 100 - dial equals the required steps.
+		if inst.Dir == day01.RIGHT {
+			required -= dial
+		} else if inst.Dir == day01.LEFT && dial != 0 {
+			// Lastly, simply step #dial times to the left.
+			required = dial
+		}
+
+		// If steps taken is more than least required,
+		// at least one zero is counted. Number of zeroes
+		// can be calculated by deviding the difference.
+		if inst.Steps >= required {
+			zeroes += 1 + (inst.Steps-required)/100
+		}
+
 		multiplier := inst.Steps/100 + 1
 		// => How many times has the dial wrapped around?
 		//    (assuming that it has turned at least once)
@@ -29,12 +50,7 @@ func Main(input string) {
 
 		// Dial rotation wrap-around
 		dial = uint((int64(dial) + steps + 100*int64(multiplier)) % 100)
-
-		// Detect zero positions for use in password
-		if dial == 0 {
-			zeroes++
-		}
 	}
 
-	fmt.Printf("The password to open the door is: '%d'", zeroes)
+	fmt.Printf("The password to open the door using the 0x434C49434B method is: '%d'", zeroes)
 }
