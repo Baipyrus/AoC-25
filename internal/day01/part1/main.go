@@ -28,11 +28,15 @@ func Main(input string) {
 	instructions, dial := day01.ParseInput(input)
 
 	for _, inst := range instructions {
+		multiplier := inst.Steps/100 + 1
+		// => How many times has the dial wrapped around?
+		//    (assuming that it has turned at least once)
+
 		// Reverse steps if DIRECTION == LEFT
 		steps := int64(inst.Steps) * int64(inst.Dir)
 
 		// Dial rotation wrap-around
-		dial = uint((int64(dial) + steps + 100) % 100)
+		dial = uint((int64(dial) + steps + 100*int64(multiplier)) % 100)
 
 		// Detect zero positions for use in password
 		if dial == 0 {
