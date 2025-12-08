@@ -5,6 +5,11 @@
 This repository stores my solutions to the daily challenges of
 [Advent of Code Calendar 2025](https://adventofcode.com/2025/).
 
+The general project layout and boilerplate were designed and created for
+[2024](https://github.com/Baipyrus/AoC-24), and it is continued here in
+its respective new repository. Previous calendars' solutions can be found
+in my [profile](https://github.com/Baipyrus?tab=repositories&q=AoC).
+
 ## Features
 
 This project is a Golang application that provides an interactive way to
