@@ -3,8 +3,8 @@ package day03_part1
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
+	"github.com/Baipyrus/AoC-25/internal/day03"
 	"github.com/Baipyrus/AoC-25/internal/registry"
 )
 
@@ -18,23 +18,20 @@ func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
 
 	var joltageSum uint64
+	batteryBanks := day03.ParseInput(input)
 
-	lines := strings.SplitSeq(input, "\n")
-	for line := range lines {
-		batteryBank := strings.TrimSpace(line)
-		if batteryBank == "" {
-			continue
-		}
+	for _, batteryBank := range batteryBanks {
+		batteries := batteryBank.Batteries
 
 		var maxJoltage uint64
-		for i := 0; i < len(batteryBank)-1; i++ {
-			leftBattery := string(batteryBank[i])
+		for i := 0; i < len(batteries)-1; i++ {
+			leftBattery := fmt.Sprint(batteries[i].Joltage)
 
-			for j := i + 1; j < len(batteryBank); j++ {
-				rightBattery := string(batteryBank[j])
+			for j := i + 1; j < len(batteries); j++ {
+				rightBattery := fmt.Sprint(batteries[j].Joltage)
 
 				// Combine the left and right batteries to get joltage
-				joltage, _ := strconv.ParseUint(string(leftBattery+rightBattery), 10, 64)
+				joltage, _ := strconv.ParseUint(leftBattery+rightBattery, 10, 64)
 
 				// Compare with last maximum joltage
 				if joltage > maxJoltage {
