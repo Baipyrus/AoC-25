@@ -3,6 +3,7 @@ package day04_part1
 import (
 	"fmt"
 
+	"github.com/Baipyrus/AoC-25/internal/day04"
 	"github.com/Baipyrus/AoC-25/internal/registry"
 )
 
@@ -14,4 +15,9 @@ func init() {
 
 func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
+
+	var paperRolls uint
+	grid := day04.ParseInput(input)
+
+	fmt.Printf("The forklift can access a total of %d rolls of paper.\n", paperRolls)
 }
