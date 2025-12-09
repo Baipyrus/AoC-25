@@ -32,7 +32,7 @@ func ParseInput(input string) (grid Grid) {
 	}
 	height = uint(len(rows))
 
-	grid = Grid{Width: width, Height: height, Cells: []Cell{}}
+	grid = Grid{Width: width, Height: height, Cells: &[]Cell{}}
 	for y, row := range rows {
 		cells := strings.Split(row, "")
 
@@ -44,7 +44,7 @@ func ParseInput(input string) (grid Grid) {
 				Type: rune(c[0]),
 			}
 
-			grid.Cells = append(grid.Cells, cell)
+			*grid.Cells = append(*grid.Cells, cell)
 		}
 	}
 

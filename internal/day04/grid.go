@@ -15,13 +15,17 @@ type Cell struct {
 }
 
 type Grid struct {
-	Cells  []Cell
+	Cells  *[]Cell
 	Width  uint
 	Height uint
 }
 
 func (g *Grid) GetCell(x uint, y uint) Cell {
-	return g.Cells[x+y*g.Width]
+	return (*g.Cells)[x+y*g.Width]
+}
+
+func (g *Grid) SetCell(x uint, y uint, c Cell) {
+	(*g.Cells)[x+y*g.Width] = c
 }
 
 func (g *Grid) GetNeighbors(x uint, y uint, wrap bool, diagonal bool) (neighbors []Cell) {
@@ -66,7 +70,7 @@ func (g *Grid) GetNeighbors(x uint, y uint, wrap bool, diagonal bool) (neighbors
 func (g *Grid) Rows() (rows [][]Cell) {
 	var currentRow []Cell
 
-	for i, c := range g.Cells {
+	for i, c := range *g.Cells {
 		if i != 0 && uint(i)%g.Width == 0 {
 			rows = append(rows, currentRow)
 			currentRow = []Cell{}
@@ -84,7 +88,7 @@ func (g *Grid) Columns() (cols [][]Cell) {
 		cols = append(cols, []Cell{})
 	}
 
-	for _, c := range g.Cells {
+	for _, c := range *g.Cells {
 		cols[c.X] = append(cols[c.X], c)
 	}
 
