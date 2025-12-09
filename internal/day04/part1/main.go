@@ -19,5 +19,27 @@ func Main(input string) {
 	var paperRolls uint
 	grid := day04.ParseInput(input)
 
+	for y := range grid.Height {
+		for x := range grid.Width {
+			cell := grid.GetCell(x, y)
+			if cell.Type != '@' {
+				continue
+			}
+
+			neighbors := grid.GetNeighbors(x, y, false, true)
+
+			var neighborCount uint
+			for _, n := range neighbors {
+				if n.Type == '@' {
+					neighborCount++
+				}
+			}
+
+			if neighborCount < 4 {
+				paperRolls++
+			}
+		}
+	}
+
 	fmt.Printf("The forklift can access a total of %d rolls of paper.\n", paperRolls)
 }
