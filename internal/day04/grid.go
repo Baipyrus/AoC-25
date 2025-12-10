@@ -71,6 +71,7 @@ func (g *Grid) Rows() (rows [][]Cell) {
 	var currentRow []Cell
 
 	for i, c := range *g.Cells {
+		// If first of row, push new row
 		if i != 0 && uint(i)%g.Width == 0 {
 			rows = append(rows, currentRow)
 			currentRow = []Cell{}
@@ -84,7 +85,7 @@ func (g *Grid) Rows() (rows [][]Cell) {
 }
 
 func (g *Grid) Columns() (cols [][]Cell) {
-	for i := uint(0); i < g.Height; i++ {
+	for i := uint(0); i < g.Width; i++ {
 		cols = append(cols, []Cell{})
 	}
 
