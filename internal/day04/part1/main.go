@@ -17,7 +17,7 @@ func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
 
 	var paperRolls uint
-	grid := day04.ParseInput(input)
+	grid := day04.ParseInput(input, true)
 
 	for y := range grid.Height {
 		for x := range grid.Width {

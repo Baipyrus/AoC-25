@@ -21,7 +21,7 @@ func Main(input string) {
 		newGrid    day04.Grid
 	)
 
-	grid := day04.ParseInput(input)
+	grid := day04.ParseInput(input, true)
 	gridHasChanged := true
 
 	// Lazy solution: simply redo this loop

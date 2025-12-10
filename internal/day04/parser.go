@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func ParseInput(input string) (grid Grid) {
+func ParseInput(input string, trimSpaces bool) (grid Grid) {
 	lines := strings.SplitSeq(input, "\n")
 
 	var (
@@ -15,20 +15,28 @@ func ParseInput(input string) (grid Grid) {
 
 	for line := range lines {
 		row := strings.TrimSpace(line)
-		currentWidth := uint(len(row))
 
 		if width == 0 {
-			width = currentWidth
+			if trimSpaces {
+				width = uint(len(row))
+			} else {
+				width = uint(len(line))
+			}
 		}
 
-		if row == "" || currentWidth != width {
-			// Technically, if the width does not match,
-			// this should error because it could be an
-			// incomplete input or similar ...
+		// Technically, if the current width does not match
+		// the previously recorded width, the program should
+		// error anyways because it could be an incomplete input
+		// or similar ... So we just ignore it here.
+		if row == "" {
 			continue
 		}
 
-		rows = append(rows, row)
+		if trimSpaces {
+			rows = append(rows, row)
+		} else {
+			rows = append(rows, line)
+		}
 	}
 	height = uint(len(rows))
 
