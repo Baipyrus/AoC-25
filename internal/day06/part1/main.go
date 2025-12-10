@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Baipyrus/AoC-25/internal/day06"
 	"github.com/Baipyrus/AoC-25/internal/registry"
 )
 
@@ -20,7 +21,7 @@ func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
 
 	whitespace := regexp.MustCompile(`\s+`)
-	var equations []*Equation
+	var equations []*day06.Equation
 
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	for i, line := range lines {
@@ -31,7 +32,7 @@ func Main(input string) {
 
 		for j, entry := range columns {
 			if len(equations) <= j {
-				equations = append(equations, &Equation{})
+				equations = append(equations, &day06.Equation{})
 			}
 
 			eq := equations[j]
@@ -55,37 +56,4 @@ func Main(input string) {
 	}
 
 	fmt.Printf("The sum total of all evaluated equations is: %d\n", sumTotal)
-}
-
-type Equation struct {
-	Numbers  []int64
-	Operator string
-}
-
-func (e *Equation) Evaluate() (result int64) {
-	// This is requires a different starting value from 0
-	// because obviously starting at 0 would negate all
-	// incoming values ...
-	if e.Operator == "*" {
-		result = 1
-	}
-
-	for _, num := range e.Numbers {
-		switch e.Operator {
-		case "*":
-			result *= num
-		case "+":
-			result += num
-		}
-	}
-
-	return result
-}
-
-func (e Equation) String() (out string) {
-	for _, num := range e.Numbers {
-		out += fmt.Sprintf("%d %s ", num, e.Operator)
-	}
-
-	return out[:len(out)-3] + " = ?"
 }
