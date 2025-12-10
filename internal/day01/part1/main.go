@@ -44,5 +44,5 @@ func Main(input string) {
 		}
 	}
 
-	fmt.Printf("The password to open the door is: '%d'", zeroes)
+	fmt.Printf("The password to open the door is: '%d'\n", zeroes)
 }

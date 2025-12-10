@@ -52,5 +52,5 @@ func Main(input string) {
 		dial = uint((int64(dial) + steps + 100*int64(multiplier)) % 100)
 	}
 
-	fmt.Printf("The password to open the door using the 0x434C49434B method is: '%d'", zeroes)
+	fmt.Printf("The password to open the door using the 0x434C49434B method is: '%d'\n", zeroes)
 }
