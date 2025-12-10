@@ -37,7 +37,7 @@ func Main(input string) {
 
 			eq := equations[j]
 			if isOperatorLine {
-				eq.Operator = entry
+				eq.Operator = rune(entry[0])
 				// This *could* be a `break` since it's
 				// always last by definition, but it
 				// makes for little to no difference.

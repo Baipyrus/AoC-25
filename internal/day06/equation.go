@@ -4,22 +4,22 @@ import "fmt"
 
 type Equation struct {
 	Numbers  []int64
-	Operator string
+	Operator rune
 }
 
 func (e *Equation) Evaluate() (result int64) {
 	// This is requires a different starting value from 0
 	// because obviously starting at 0 would negate all
 	// incoming values ...
-	if e.Operator == "*" {
+	if e.Operator == '*' {
 		result = 1
 	}
 
 	for _, num := range e.Numbers {
 		switch e.Operator {
-		case "*":
+		case '*':
 			result *= num
-		case "+":
+		case '+':
 			result += num
 		}
 	}
@@ -29,7 +29,7 @@ func (e *Equation) Evaluate() (result int64) {
 
 func (e Equation) String() (out string) {
 	for _, num := range e.Numbers {
-		out += fmt.Sprintf("%d %s ", num, e.Operator)
+		out += fmt.Sprintf("%d %s ", num, string(e.Operator))
 	}
 
 	return out[:len(out)-3] + " = ?"
