@@ -56,7 +56,7 @@ func Main(input string) {
 					// Removing the old paper roll that
 					// has been removed by the forklift
 					cell.Type = '.'
-					newGrid.SetCell(x, y, cell)
+					newGrid.SetCell(cell)
 
 					// Another accessible paper roll
 					// has been found! We need to redo

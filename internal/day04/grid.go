@@ -24,7 +24,8 @@ func (g *Grid) GetCell(x uint, y uint) Cell {
 	return (*g.Cells)[x+y*g.Width]
 }
 
-func (g *Grid) SetCell(x uint, y uint, c Cell) {
+func (g *Grid) SetCell(c Cell) {
+	x, y := c.X, c.Y
 	(*g.Cells)[x+y*g.Width] = c
 }
 
