@@ -62,7 +62,7 @@ reachBottomLoop:
 		}
 
 		// Split beam to the right of this splitter
-		if nextCell.X < grid.Width {
+		if nextCell.X < grid.Width-1 {
 			splittersHit += setTachyonBeam(grid, nextCell.X+1, nextCell.Y)
 		}
 
