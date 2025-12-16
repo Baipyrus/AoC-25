@@ -18,72 +18,58 @@ func Main(input string) {
 
 	grid := day04.ParseInput(input, true)
 	manifold := findTachyonManifold(grid)
-	splittersHit := shootTachyonBeam(&grid, manifold)
 
-	fmt.Printf("The tachyon beam was split a total of %d times.\n", splittersHit)
+	timelineMemory := make(map[uint]uint64)
+	timelineCount := shootTachyonBeam(&grid, manifold, &timelineMemory)
+
+	fmt.Printf("The tachyon beam splitting has created a total of %d timelines.\n", timelineCount)
 }
 
-func shootTachyonBeam(grid *day04.Grid, manifold day04.Cell) (splittersHit uint64) {
-	// WARNING: Manifold must not be empty space or splitter!
-	if !(manifold.Type == 'S' || manifold.Type == '|') {
-		return 0
+func shootTachyonBeam(grid *day04.Grid, manifold day04.Cell, memory *map[uint]uint64) (timelineCount uint64) {
+	startIdx := manifold.Idx
+	if count := (*memory)[startIdx]; count > 0 {
+		return count
 	}
 	currentCell := manifold
 
 reachBottomLoop:
 	for true {
 		if currentCell.Y+1 == grid.Height {
+			timelineCount++
 			break reachBottomLoop
 		}
 
 		nextCell := grid.GetCell(currentCell.X, currentCell.Y+1)
 		switch nextCell.Type {
 		case '.':
-			nextCell.Type = '|'
-			grid.SetCell(nextCell)
-
 			currentCell = nextCell
 			continue reachBottomLoop
-		case '|':
-			break reachBottomLoop
 		case 'S':
 			// WARNING: This should never be possible, as beams only travel
 			//          downwards and there can only be one manifold at which
 			//          the process should be started on!
 			return 0
 		}
-
 		// NOTE: We should only ever get here if the next cell is a splitter!
-		splittersHit++
 
 		// Split beam to the left of this splitter
 		if nextCell.X > 0 {
-			splittersHit += setTachyonBeam(grid, nextCell.X-1, nextCell.Y)
+			leftSplit := grid.GetCell(nextCell.X-1, nextCell.Y)
+			timelineCount += shootTachyonBeam(grid, leftSplit, memory)
 		}
 
 		// Split beam to the right of this splitter
 		if nextCell.X < grid.Width-1 {
-			splittersHit += setTachyonBeam(grid, nextCell.X+1, nextCell.Y)
+			rightSplit := grid.GetCell(nextCell.X+1, nextCell.Y)
+			timelineCount += shootTachyonBeam(grid, rightSplit, memory)
 		}
 
 		// End the current beam (successfully hit splitter)
 		break reachBottomLoop
 	}
 
-	return splittersHit
-}
-
-func setTachyonBeam(grid *day04.Grid, x, y uint) uint64 {
-	cell := grid.GetCell(x, y)
-
-	if cell.Type == '.' {
-		cell.Type = '|'
-		grid.SetCell(cell)
-
-		return shootTachyonBeam(grid, cell)
-	}
-
-	return 0
+	(*memory)[startIdx] = timelineCount
+	return timelineCount
 }
 
 func findTachyonManifold(grid day04.Grid) (manifold day04.Cell) {
