@@ -4,19 +4,19 @@ import "fmt"
 
 // This type is meant to represent a pair of two points
 // all the while providing a cached valued of their
-// distance between each other. Additionally, we allow
-// its previous index in any array to be stored inside it.
-type PointDistance struct {
-	A    Point
-	B    Point
-	Dist float64
+// distance between each other. Because of the similarities,
+// we interpret this as a rectangle made up of these points.
+type Rectangle struct {
+	A        Point
+	B        Point
+	Diagonal float64
 }
 
-func (pd PointDistance) String() string {
-	return fmt.Sprintf("Point A: %s\n   -   = Dist.: %.2f\nPoint B: %s", pd.A, pd.Dist, pd.B)
+func (pd Rectangle) String() string {
+	return fmt.Sprintf("Point A: %s\n   -   = Dist.: %.2f\nPoint B: %s", pd.A, pd.Diagonal, pd.B)
 }
 
-func Combinations(boxes []Point) (closest []PointDistance) {
+func Combinations(boxes []Point) (closest []Rectangle) {
 	// Scan all *unique* combinations of boxes to create
 	// a list of two-point-distance combinations.
 	scannedBoxes := make(map[KeyPair]bool)
@@ -39,10 +39,10 @@ func Combinations(boxes []Point) (closest []PointDistance) {
 
 			closest = append(
 				closest,
-				PointDistance{
-					A:    current,
-					B:    next,
-					Dist: dist})
+				Rectangle{
+					A:        current,
+					B:        next,
+					Diagonal: dist})
 		}
 	}
 

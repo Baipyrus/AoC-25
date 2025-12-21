@@ -26,8 +26,8 @@ func Main(input string) {
 	// the two points that are closest to each other!
 	slices.SortFunc(
 		closest,
-		func(a, b day08.PointDistance) int {
-			return int(a.Dist - b.Dist)
+		func(a, b day08.Rectangle) int {
+			return int(a.Diagonal - b.Diagonal)
 		})
 
 	// NOTE: IMPORTANT! We only want to make n connections!
@@ -57,7 +57,7 @@ func mergeCircuits(cache *map[int]*day08.Circuit, a, b *day08.Circuit) {
 	b.Boxes = []day08.Point{}
 }
 
-func connectPoints(points []day08.PointDistance) (circuits []*day08.Circuit) {
+func connectPoints(points []day08.Rectangle) (circuits []*day08.Circuit) {
 	// We want to remember which box is part
 	// of which circuit without having to search!
 	connected := make(map[int]*day08.Circuit)
