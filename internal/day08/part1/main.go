@@ -27,10 +27,10 @@ func Main(input string) {
 	// Scan all *unique* combinations of boxes to create
 	// a list of two-point-distance combinations.
 	scannedBoxes := make(map[day08.KeyPair]bool)
-	for i := 0; i < len(boxes); i++ {
+	for i := range boxes {
 		current := boxes[i]
 
-		for j := 0; j < len(boxes); j++ {
+		for j := range boxes {
 			// We want to ignore previously scanned
 			// pairs where (i, j) = (j, i).
 			keyPair := day08.NewKeyPair(i, j)
