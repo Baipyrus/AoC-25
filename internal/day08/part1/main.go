@@ -17,40 +17,10 @@ func init() {
 func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
 
-	var (
-		closest     []day08.PointDistance
-		connections int = 1000
-	)
+	var connections int = 1000
 
 	boxes := day08.ParseInput(input)
-
-	// Scan all *unique* combinations of boxes to create
-	// a list of two-point-distance combinations.
-	scannedBoxes := make(map[day08.KeyPair]bool)
-	for i := range boxes {
-		current := boxes[i]
-
-		for j := range boxes {
-			// We want to ignore previously scanned
-			// pairs where (i, j) = (j, i).
-			keyPair := day08.NewKeyPair(i, j)
-			if i == j || scannedBoxes[keyPair] {
-				continue
-			}
-			scannedBoxes[keyPair] = true
-
-			// Calculate and save closest point pair
-			next := boxes[j]
-			dist := day08.Distance(current, next)
-
-			closest = append(
-				closest,
-				day08.PointDistance{
-					A:    current,
-					B:    next,
-					Dist: dist})
-		}
-	}
+	closest := day08.Combinations(boxes)
 
 	// Sort all combinations such that we can start with
 	// the two points that are closest to each other!
