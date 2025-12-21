@@ -62,18 +62,18 @@ func connectPoints(points []day08.Rectangle) (circuits []*day08.Circuit) {
 	// of which circuit without having to search!
 	connected := make(map[int]*day08.Circuit)
 
-	for _, pd := range points {
-		aCache := connected[pd.A.Idx]
-		bCache := connected[pd.B.Idx]
+	for _, rect := range points {
+		aCache := connected[rect.A.Idx]
+		bCache := connected[rect.B.Idx]
 
 		// If none of the points have been connected yet,
 		// create a new circuit and cache their connection!
 		if aCache == nil && bCache == nil {
 			circuitIdx := len(circuits)
-			newCircuit := &day08.Circuit{Boxes: []day08.Point{pd.A, pd.B}, Idx: circuitIdx}
+			newCircuit := &day08.Circuit{Boxes: []day08.Point{rect.A, rect.B}, Idx: circuitIdx}
 
-			connected[pd.A.Idx] = newCircuit
-			connected[pd.B.Idx] = newCircuit
+			connected[rect.A.Idx] = newCircuit
+			connected[rect.B.Idx] = newCircuit
 
 			circuits = append(circuits, newCircuit)
 			continue
@@ -92,14 +92,14 @@ func connectPoints(points []day08.Rectangle) (circuits []*day08.Circuit) {
 		// This means that we can add point B to the circuit
 		// that point A is also in!
 		oldCircuit := aCache
-		newPoint := pd.B
+		newPoint := rect.B
 
 		// If the assumtion is wrong, then this must mean
 		// that point B has been cached, so we need to
 		// add point A to the circuit of point B!
 		if aCache == nil {
 			oldCircuit = bCache
-			newPoint = pd.A
+			newPoint = rect.A
 		}
 
 		connected[newPoint.Idx] = oldCircuit

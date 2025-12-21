@@ -12,8 +12,8 @@ type Rectangle struct {
 	Diagonal float64
 }
 
-func (pd Rectangle) String() string {
-	return fmt.Sprintf("Point A: %s\n   -   = Dist.: %.2f\nPoint B: %s", pd.A, pd.Diagonal, pd.B)
+func (rect Rectangle) String() string {
+	return fmt.Sprintf("Point A: %s\n   -   = Dist.: %.2f\nPoint B: %s", rect.A, rect.Diagonal, rect.B)
 }
 
 func Combinations(boxes []Point) (closest []Rectangle) {
