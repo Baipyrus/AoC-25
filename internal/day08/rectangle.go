@@ -10,6 +10,13 @@ type Rectangle struct {
 	A        Point
 	B        Point
 	Diagonal float64
+	Area     uint64
+}
+
+func Area(a, b Point) uint64 {
+	maxX, maxY := max(a.X, b.X), max(a.Y, b.Y)
+	minX, minY := min(a.X, b.X), min(a.Y, b.Y)
+	return (maxX - minX + 1) * (maxY - minY + 1)
 }
 
 func (rect Rectangle) String() string {
@@ -36,13 +43,15 @@ func Combinations(boxes []Point) (closest []Rectangle) {
 			// Calculate and save closest point pair
 			next := boxes[j]
 			dist := Distance(current, next)
+			area := Area(current, next)
 
 			closest = append(
 				closest,
 				Rectangle{
 					A:        current,
 					B:        next,
-					Diagonal: dist})
+					Diagonal: dist,
+					Area:     area})
 		}
 	}
 
