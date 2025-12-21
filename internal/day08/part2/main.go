@@ -17,11 +17,7 @@ func init() {
 func Main(input string) {
 	fmt.Printf("Executing: %s\n", name)
 
-	var (
-		closest     []day08.PointDistance
-		connections int = 1000
-	)
-
+	var closest []day08.PointDistance
 	boxes := day08.ParseInput(input)
 
 	// Scan all *unique* combinations of boxes to create
@@ -60,19 +56,10 @@ func Main(input string) {
 			return int(a.Dist - b.Dist)
 		})
 
-	// NOTE: IMPORTANT! We only want to make n connections!
-	circuits := connectPoints(closest[:connections])
+	lastPair := connectPoints(closest)
 
-	// For our final solution, we want to multiply the three
-	// largest circuit's lengths with each other:
-	slices.SortFunc(
-		circuits,
-		func(a, b *day08.Circuit) int {
-			return len(b.Boxes) - len(a.Boxes)
-		})
-
-	product := len(circuits[0].Boxes) * len(circuits[1].Boxes) * len(circuits[2].Boxes)
-	fmt.Printf("The product of multiplying the length of the three largest circuits is: %d\n", product)
+	product := lastPair.A.X * lastPair.B.X
+	fmt.Printf("The product of multiplying the x-coordinates of the last connected pair is: %d\n", product)
 }
 
 func mergeCircuits(cache *map[int]*day08.Circuit, a, b *day08.Circuit) {
@@ -87,7 +74,9 @@ func mergeCircuits(cache *map[int]*day08.Circuit, a, b *day08.Circuit) {
 	b.Boxes = []day08.Point{}
 }
 
-func connectPoints(points []day08.PointDistance) (circuits []*day08.Circuit) {
+func connectPoints(points []day08.PointDistance) (previousPair day08.PointDistance) {
+	var circuits []*day08.Circuit
+
 	// We want to remember which box is part
 	// of which circuit without having to search!
 	connected := make(map[int]*day08.Circuit)
@@ -95,6 +84,15 @@ func connectPoints(points []day08.PointDistance) (circuits []*day08.Circuit) {
 	for _, pd := range points {
 		aCache := connected[pd.A.Idx]
 		bCache := connected[pd.B.Idx]
+
+		// If both points are already in the circuit
+		// we do not need to do anything anymore.
+		if aCache != nil && aCache == bCache {
+			continue
+		}
+
+		// Save the last used pair of points for output
+		previousPair = pd
 
 		// If none of the points have been connected yet,
 		// create a new circuit and cache their connection!
@@ -107,14 +105,8 @@ func connectPoints(points []day08.PointDistance) (circuits []*day08.Circuit) {
 
 			circuits = append(circuits, newCircuit)
 			continue
-		} else if aCache != nil && bCache != nil {
-			if aCache != bCache {
-				mergeCircuits(&connected, aCache, bCache)
-				continue
-			}
-
-			// If both points are already in the circuit
-			// we do not need to do anything anymore.
+		} else if aCache != nil && bCache != nil && aCache != bCache {
+			mergeCircuits(&connected, aCache, bCache)
 			continue
 		}
 
@@ -137,5 +129,5 @@ func connectPoints(points []day08.PointDistance) (circuits []*day08.Circuit) {
 
 	}
 
-	return circuits
+	return previousPair
 }
