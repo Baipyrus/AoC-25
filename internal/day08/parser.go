@@ -17,7 +17,11 @@ func ParseInput(input string) (boxes []Point) {
 		coordinates := strings.Split(bline, ",")
 		x, _ := strconv.ParseUint(coordinates[0], 10, 64)
 		y, _ := strconv.ParseUint(coordinates[1], 10, 64)
-		z, _ := strconv.ParseUint(coordinates[2], 10, 64)
+
+		var z uint64
+		if len(coordinates) >= 3 {
+			z, _ = strconv.ParseUint(coordinates[2], 10, 64)
+		}
 
 		next := Point{X: x, Y: y, Z: z, Idx: i}
 		next.Mag = next.Magnitude()
