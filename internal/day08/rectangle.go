@@ -26,7 +26,7 @@ func (rect Rectangle) String() string {
 func Combinations(boxes []Point) (closest []Rectangle) {
 	// Scan all *unique* combinations of boxes to create
 	// a list of two-point-distance combinations.
-	scannedBoxes := make(map[KeyPair]bool)
+	scannedBoxes := make(map[KeyPair[int]]bool)
 
 	for i := range boxes {
 		current := boxes[i]
