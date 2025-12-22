@@ -8,7 +8,7 @@ import "cmp"
 // matter. Because of this, it is recommended to NEVER
 // create a custom instance of this, but to use the
 // provided `NewKeyPair` function instead.
-type KeyPair[T cmp.Ordered] struct {
+type KeyPair[T any] struct {
 	Max T
 	Min T
 }
@@ -23,5 +23,17 @@ func NewKeyPair[T cmp.Ordered](a, b T) KeyPair[T] {
 	}
 
 	// And if not, switch them
+	return KeyPair[T]{Max: b, Min: a}
+}
+
+// ... and the same as `NewKeyPair`, except with a
+// a generic comparison function where `cmp(a, b)==true`
+// would mean that a new `KeyPair` with `{Max:a,Min:b}`
+// will be created!
+func NewKeyPairFunc[T any](a, b T, cmp func(a, b T) bool) KeyPair[T] {
+	if cmp(a, b) {
+		return KeyPair[T]{Max: a, Min: b}
+	}
+
 	return KeyPair[T]{Max: b, Min: a}
 }
