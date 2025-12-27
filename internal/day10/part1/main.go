@@ -36,6 +36,12 @@ type EnqueuedState struct {
 // Solve this machine from an empty state all the way to
 // the goal state in the fewest possible button presses:
 func SolveMachine(m *day10.Machine) uint {
+	// NOTE: This approach should be identical to running breadth-first search
+	//       on a tree that represents all the different mutations that a
+	//       machine's buttons can produce on an initial state.
+	//       (This also means there are more optimizations to be made. For example,
+	//       you could simply try using a different algorithm like Dijkstra's!)
+
 	// Save goal in readable variable, initialize empty starting state
 	goal := m.State
 	start := make(day10.MachineState, len(goal))
