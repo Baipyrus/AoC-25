@@ -46,6 +46,12 @@ func SolveMachine(m *day10.Machine) uint {
 	var start day10.MachineState
 	goal := m.State
 
+	// Remember which states have already been calculated, because
+	// it will always result in the same follow-up action!
+	// NOTE: Although the actual boolean value of this map
+	//       (true => solution) is never *actually* used
+	visited := make(map[day10.MachineState]bool)
+
 	// Initialize queue with empty state as its first entry
 	// NOTE: This could be optimized with an actual FIFO queue
 	queue := []EnqueuedState{{State: start, Steps: 0}}
@@ -60,6 +66,7 @@ func SolveMachine(m *day10.Machine) uint {
 
 		// If they are equal, this machine is solved!
 		if current.State == goal {
+			visited[current.State] = true
 			return current.Steps
 		}
 
@@ -86,8 +93,17 @@ func SolveMachine(m *day10.Machine) uint {
 			cpyState := current.State
 			cpyState.Mutate(b)
 
+			// Ignore mutated state if it's already been computed before.
+			// This prevents loops and similarities in sub-branches!
+			if _, ok := visited[cpyState]; ok {
+				continue
+			}
+
+			// Enqueue newly mutated state as next step
 			queue = append(queue, EnqueuedState{State: cpyState, Steps: current.Steps + 1})
 		}
+
+		visited[current.State] = false
 	}
 
 	// No solution to reach the goal could be found!
