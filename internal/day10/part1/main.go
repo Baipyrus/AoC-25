@@ -53,16 +53,29 @@ func SolveMachine(m *day10.Machine) uint {
 	visited := make(map[day10.MachineState]bool)
 
 	// Initialize queue with empty state as its first entry
-	// NOTE: This could be optimized with an actual FIFO queue
-	queue := []EnqueuedState{{State: start, Steps: 0}}
+	// NOTE: This is a very mild optimization compared to the
+	//       dynamic array from before this change. I have also
+	//       tried using a 3rd party FIFO queue, but it only
+	//       managed to improve another ~3ms on large inputs.
+	//       The real problem with this large static array is
+	//       that small inputs will always carry this unnecessary
+	//       mass with them, which slows them down...
+
+	var queue [16384]EnqueuedState // <- len: 2^14
+	queue[0] = EnqueuedState{State: start, Steps: 0}
+	firstPos := 0
+	lastPos := 0
 
 	// FIFO Queue: (FIRST IN, FIRST OUT).
 	// Take the first element in the queue, find what's wrong with it,
 	// find a way to correct the state one step closer to the goal.
 	// Repeat until current state equals goal state.
-	for len(queue) > 0 {
-		current := queue[0]
-		queue = queue[1:]
+	for firstPos <= lastPos {
+		current := queue[firstPos]
+
+		// "Delete" and forget about queue entry
+		queue[firstPos] = EnqueuedState{}
+		firstPos++
 
 		// If they are equal, this machine is solved!
 		if current.State == goal {
@@ -99,8 +112,12 @@ func SolveMachine(m *day10.Machine) uint {
 				continue
 			}
 
+			// Increment last queue position index first because
+			// it is now the new index of the next queue entry!
+			lastPos++
+
 			// Enqueue newly mutated state as next step
-			queue = append(queue, EnqueuedState{State: cpyState, Steps: current.Steps + 1})
+			queue[lastPos] = EnqueuedState{State: cpyState, Steps: current.Steps + 1}
 		}
 
 		visited[current.State] = false
