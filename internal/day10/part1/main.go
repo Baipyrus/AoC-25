@@ -20,7 +20,7 @@ func Main(input string) {
 
 	machines := day10.ParseInput(input)
 
-	var sum uint
+	var sum uint16
 	for _, m := range machines {
 		sum += SolveMachine(m)
 	}
@@ -30,12 +30,12 @@ func Main(input string) {
 
 type EnqueuedState struct {
 	State day10.MachineState
-	Steps uint
+	Steps uint16
 }
 
 // Solve this machine from an empty state all the way to
 // the goal state in the fewest possible button presses:
-func SolveMachine(m *day10.Machine) uint {
+func SolveMachine(m *day10.Machine) uint16 {
 	// NOTE: This approach should be identical to running breadth-first search
 	//       on a tree that represents all the different mutations that a
 	//       machine's buttons can produce on an initial state.
@@ -124,5 +124,5 @@ func SolveMachine(m *day10.Machine) uint {
 	}
 
 	// No solution to reach the goal could be found!
-	return math.MaxUint
+	return math.MaxUint16
 }
