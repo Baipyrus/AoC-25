@@ -11,7 +11,7 @@ type Machine struct {
 	Joltages string
 }
 
-func (m *Machine) Deserialize(serialized string) error {
+func NewMachine(serialized string) (out Machine, _ error) {
 	parts := strings.Split(serialized, " ")
 
 	for i, p := range parts {
@@ -22,23 +22,23 @@ func (m *Machine) Deserialize(serialized string) error {
 			//       per serialized machine string!!!
 			machineStateGoal, err := NewMachineState(p)
 			if err != nil {
-				return fmt.Errorf("Failed to parse state for machine at %d ('%s'): %w", i, p, err)
+				return out, fmt.Errorf("Failed to parse state for machine at %d ('%s'): %w", i, p, err)
 			}
 
-			m.State = machineStateGoal
+			out.State = machineStateGoal
 		case "()":
 			b, err := NewButton(p)
 			if err != nil {
-				return fmt.Errorf("Failed to parse button for machine at %d ('%s'): %w", i, p, err)
+				return out, fmt.Errorf("Failed to parse button for machine at %d ('%s'): %w", i, p, err)
 			}
 
-			m.Buttons = append(m.Buttons, b)
+			out.Buttons = append(out.Buttons, b)
 		case "{}":
 			// NOTE: Machine joltages *should* only appear once
 			//       per serialized machine string!!!
-			m.Joltages = p
+			out.Joltages = p
 		default:
-			return fmt.Errorf("Unknown machine syntax!")
+			return out, fmt.Errorf("Unknown machine syntax!")
 		}
 	}
 
@@ -46,7 +46,7 @@ func (m *Machine) Deserialize(serialized string) error {
 	//       buttons actually reference existing indices for state
 	//       indicator lights here ... D:
 
-	return nil
+	return out, nil
 }
 
 func (m Machine) String() string {

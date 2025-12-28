@@ -14,14 +14,12 @@ func ParseInput(input string) (machines []*Machine) {
 			continue
 		}
 
-		var machine Machine
-
 		// NOTE: I know, I know ... I don't usually do error
 		//       handling in AoC entries like this, but I was
 		//       already writing all this "clean" looking
 		//       boilerplate and so I just had to keep passing
 		//       the error upward! :D
-		err := machine.Deserialize(bline)
+		machine, err := NewMachine(bline)
 		if err != nil {
 			log.Fatal(err)
 		}
