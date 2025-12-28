@@ -39,7 +39,8 @@ func SolveMachine(m *day10.Machine) uint16 {
 	//       on a tree that represents all the different mutations that a
 	//       machine's buttons can produce on an initial state.
 	//       (This also means there are more optimizations to be made. For example,
-	//       you could simply try using a different algorithm like Dijkstra's!)
+	//       you could simply try using a different algorithm like Dijkstra's
+	//       ... or at least I think so, but don't quote me on that XD)
 
 	// Save goal in readable variable, initialize empty starting state
 	var start day10.MachineState
