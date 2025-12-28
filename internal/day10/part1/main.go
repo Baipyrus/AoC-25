@@ -43,8 +43,8 @@ func SolveMachine(m *day10.Machine) uint {
 	//       you could simply try using a different algorithm like Dijkstra's!)
 
 	// Save goal in readable variable, initialize empty starting state
+	var start day10.MachineState
 	goal := m.State
-	start := make(day10.MachineState, len(goal))
 
 	// Initialize queue with empty state as its first entry
 	// NOTE: This could be optimized with an actual FIFO queue
@@ -58,20 +58,20 @@ func SolveMachine(m *day10.Machine) uint {
 		current := queue[0]
 		queue = queue[1:]
 
+		// If they are equal, this machine is solved!
+		if current.State == goal {
+			return current.Steps
+		}
+
 		// Find first indicator light that is unequal to its goal position
-		firstUnequal := -1
-		for i, s := range goal {
-			if s == current.State[i] {
+		var firstUnequal uint
+		for i := range day10.BIT_PACKING_SIZE {
+			if goal.At(i) == current.State.At(i) {
 				continue
 			}
 
 			firstUnequal = i
 			break
-		}
-
-		// If all are equal, this machine is solved!
-		if firstUnequal == -1 {
-			return current.Steps
 		}
 
 		// Find all buttons that change at least this one indicator
@@ -83,7 +83,7 @@ func SolveMachine(m *day10.Machine) uint {
 
 			// With this button, mutate state and enqueue it as the
 			// next child item of this tree node!
-			cpyState := current.State.Copy()
+			cpyState := current.State
 			cpyState.Mutate(b)
 
 			queue = append(queue, EnqueuedState{State: cpyState, Steps: current.Steps + 1})
