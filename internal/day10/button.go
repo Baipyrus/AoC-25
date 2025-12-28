@@ -14,20 +14,25 @@ func NewButton(serialized string) (out Button, _ error) {
 
 	sequence := serialized[1 : len(serialized)-1]
 	indices := strings.Split(sequence, ",")
+	var bitmask MachineState
+
 	for i, idx := range indices {
 		uIdx, err := strconv.ParseUint(idx, 10, 32)
 		if err != nil {
 			return out, fmt.Errorf("Failed to parse button index at %d ('%s'): %w", i, idx, err)
 		}
 
+		bitmask ^= 1 << uIdx
 		out.Sequence = append(out.Sequence, uint(uIdx))
 	}
 
+	out.Bitmask = bitmask
 	return out, nil
 }
 
 type Button struct {
 	Sequence []uint
+	Bitmask  MachineState
 }
 
 func (b Button) String() (out string) {

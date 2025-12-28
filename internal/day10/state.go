@@ -2,7 +2,6 @@ package day10
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 )
 
@@ -45,11 +44,7 @@ type MachineState uint16
 
 // Flip all indicators in a state according to a button
 func (ms *MachineState) Mutate(b Button) {
-	for i := range BIT_PACKING_SIZE {
-		if slices.Contains(b.Sequence, i) {
-			*ms ^= 1 << i
-		}
-	}
+	*ms ^= b.Bitmask
 }
 
 func (ms *MachineState) At(i uint) bool {

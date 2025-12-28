@@ -3,7 +3,6 @@ package day10_part1
 import (
 	"fmt"
 	"math"
-	"slices"
 
 	"github.com/Baipyrus/AoC-25/internal/day10"
 	"github.com/Baipyrus/AoC-25/internal/registry"
@@ -95,9 +94,8 @@ func SolveMachine(m *day10.Machine) uint16 {
 		}
 
 		// Find all buttons that change at least this one indicator
-		uFirst := uint(firstUnequal)
 		for _, b := range m.Buttons {
-			if !slices.Contains(b.Sequence, uFirst) {
+			if !b.Bitmask.At(firstUnequal) {
 				continue
 			}
 
